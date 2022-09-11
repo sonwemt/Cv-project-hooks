@@ -1,1 +1,1 @@
-Placeholder text
+A rewrite of my original cv-project that uses functional hooks instead of classes.
