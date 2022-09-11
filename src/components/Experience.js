@@ -1,70 +1,52 @@
-import { Component } from "react";
+import { useState } from "react";
 import "../styles/experience.css";
 import ExperienceOverview from "../components/ExperienceOverview";
 import ExperienceForm from "./ExperienceForm";
 import uniqid from "uniqid";
 
-export default class Experience extends Component {
-  constructor(props) {
-    super(props);
+export default function Experience() {
+    const [experienceList, setExperienceList] = useState([]);
+    const [experience, setExperience] = useState({
+      company: '',
+      position: '',
+      taskings: '',
+      start: '',
+      end: '',
+      showEdit: false,
+      index: false,
+      id: uniqid(),
+    });
 
-    this.state = {
-      experienceList: [],
-      experience: {
-        company: '',
-        position: '',
-        taskings: '',
-        start: '',
-        end: '',
-        showEdit: false,
-        index: false,
-        id: uniqid(),
-      }
-    }
-
-    this.onEditSubmit.bind(this);
-    this.onExperienceSubmit.bind(this);
-    this.deleteExperience.bind(this);
-    this.editExperience.bind(this);
-  }
-
-  editExperience = (index) => {
-    const newArray = Array.from(this.state.experienceList);
+  const editExperience = (index) => {
+    const newArray = Array.from(experienceList);
     newArray[index].showEdit = true;
-    this.setState({
-      experienceList:  newArray,
-    })
+    setExperienceList(newArray);
   }
 
-  deleteExperience = (index) => {
-    const newArray = Array.from(this.state.experienceList);
+  const deleteExperience = (index) => {
+    const newArray = Array.from(experienceList);
     newArray.splice(index, 1);
     for(let i = 0; i < newArray.length; i += 1) {
       newArray[i].index = i;
     }
-    this.setState({
-      experienceList: newArray,
-    })
+    setExperienceList(newArray);
   }
 
-  onEditSubmit = (info) => {
-    const newArray = Array.from(this.state.experienceList);
+  const onEditSubmit = (info) => {
+    const newArray = Array.from(experienceList);
     const index = info.index;
     const newInfo = info;
     newInfo.showEdit = false;
     newArray.splice(index, 1, newInfo);
-    this.setState({
-      experienceList:  newArray,
-    })
+    setExperienceList(newArray);
   }
 
 
-  onExperienceSubmit = (info) => {
+  const onExperienceSubmit = (info) => {
     const newInfo = info;
-    newInfo.index = this.state.experienceList.length;
-    this.setState({
-      experienceList: this.state.experienceList.concat(newInfo),
-      experience: {
+    newInfo.index = experienceList.length;
+    setExperienceList(experienceList.concat(newInfo));
+    setExperience({
         company: '',
         position: '',
         taskings: '',
@@ -73,29 +55,26 @@ export default class Experience extends Component {
         showEdit: false,
         index: false,
         id: uniqid(),
-      }
-    });
+      });
   }
 
-  render() {
-    return (
-      <div id="experienceContainer">
-        <h2 className="subheader">Experience</h2>
-        <div id="experienceEntries">
-          <ExperienceOverview
-            experiences={this.state.experienceList}
-            editExperience={this.editExperience}
-            deleteExperience={this.deleteExperience}
-            submit={this.onEditSubmit}
-          />
-        </div>
-        <div id="experienceMainForm">
-          <ExperienceForm
-            experience={this.state.experience}
-            submit={this.onExperienceSubmit}
-          />
-        </div>
+  return (
+    <div id="experienceContainer">
+      <h2 className="subheader">Experience</h2>
+      <div id="experienceEntries">
+        <ExperienceOverview
+          experienceList={experienceList}
+          editExperience={editExperience}
+          deleteExperience={deleteExperience}
+          submit={onEditSubmit}
+        />
       </div>
-    );
-  }
+      <div id="experienceMainForm">
+        <ExperienceForm
+          experience={experience}
+          submit={onExperienceSubmit}
+        />
+      </div>
+    </div>
+  );
 }

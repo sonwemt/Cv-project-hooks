@@ -1,76 +1,62 @@
-import { Component } from "react"
+import { useState } from "react"
 import "../styles/information.css";
 
-export default class Information extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      name: '',
-      email: '',
-      phoneNumber: '',
-      showForm: true,
-    }
+
+export default function Information() {
+  const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [showForm, setShowForm] = useState(true);
+
+  const onNameChange = (e) => {
+    setFullname(e.target.value);
   }
-
-  onNameChange = (e) => {
-    this.setState({name: e.target.value});
+  
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
   }
-
-  onEmailChange = (e) => {
-    this.setState({email: e.target.value});
+  
+  const onPhoneChange = (e) => {
+    setPhoneNumber(e.target.value);
   }
-
-  onPhoneChange = (e) => {
-    this.setState({phoneNumber: e.target.value});
-  }
-
-  onSubmitContactInfo = (e) => {
+  
+  const onSubmitContactInfo = (e) => {
     e.preventDefault();
-    this.setState({showForm: false});
+    setShowForm(false);
   }
-
-  onEditContactInfo = (e) => {
+  
+  const onEditContactInfo = (e) => {
     e.preventDefault();
-    this.setState({showForm: true});
+    setShowForm(true);
   }
-
-  getForm() {
+  
+  if(showForm) {
     return (
       <div id="contactInfoContainer">
-        <form id="contactInfoForm" onSubmit={this.onSubmitContactInfo}>
+        <form id="contactInfoForm" onSubmit={onSubmitContactInfo}>
           <label htmlFor="fullNameInput">Full Name: </label>
-          <input type="text" id="fullNameInput" value={this.state.name} onChange={this.onNameChange}/>
+          <input type="text" id="fullNameInput" value={fullname} onChange={onNameChange}/>
           <label htmlFor="emailInput">Email: </label>
-          <input type="email" id="emailInput" value={this.state.email} onChange={this.onEmailChange}/>
+          <input type="email" id="emailInput" value={email} onChange={onEmailChange}/>
           <label htmlFor="phoneNumberInput">Phone Number: </label>
-          <input type="number" id="phoneNumberInput" value={this.state.phoneNumber} onChange={this.onPhoneChange} />
+          <input type="number" id="phoneNumberInput" value={phoneNumber} onChange={onPhoneChange} />
           <button type="submit" className="submitButton" >Submit Info</button>
         </form>
       </div>
     );
   }
-
-  showInformation() {
-    return (
-      <div id="contactInfoContainer">
-        <form id="contactInfoForm" onSubmit={this.onEditContactInfo}>
-          <div>Full Name: </div>
-          <div>{this.state.name}</div>
-          <div>Email: </div>
-          <div>{this.state.email}</div>
-          <div>Phone Number: </div>
-          <div>{this.state.phoneNumber}</div>
-          <button type="submit" className="editButton">Edit Info</button>
-        </form>
-      </div>
-    )
-  }
-
-  render() {
-    if(this.state.showForm) {
-      return this.getForm();
-    }
-    return this.showInformation();
-  }   
-}
+  return (
+    <div id="contactInfoContainer">
+      <form id="contactInfoForm" onSubmit={onEditContactInfo}>
+        <div>Full Name: </div>
+        <div>{fullname}</div>
+        <div>Email: </div>
+        <div>{email}</div>
+        <div>Phone Number: </div>
+        <div>{phoneNumber}</div>
+        <button type="submit" className="editButton">Edit Info</button>
+      </form>
+    </div>
+  )
+}   
